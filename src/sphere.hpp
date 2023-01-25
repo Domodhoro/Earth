@@ -95,7 +95,7 @@ protected:
         glVertexAttribPointer    (1, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        if (m_VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'chunk'"};
+        if (m_VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'sphere'"};
 
         glBindVertexArray(0);
     }

@@ -29,10 +29,12 @@ struct sphere {
             m_vertice.push_back({x, y, z, PHI, THETA});
 
             const std::initializer_list<unsigned int> indices {
-                static_cast<unsigned int>(sectors *  r      + s),
-                static_cast<unsigned int>(sectors *  r      + (s + 1)),
-                static_cast<unsigned int>(sectors * (r + 1) + (s + 1)),
-                static_cast<unsigned int>(sectors * (r + 1) + s)
+                static_cast<unsigned int>(sectors * (r + 0) + (s + 0)),
+                static_cast<unsigned int>(sectors * (r + 0) + (s + 1)),
+                static_cast<unsigned int>(sectors * (r + 1) + (s + 0)),
+                static_cast<unsigned int>(sectors * (r + 1) + (s + 0)),
+                static_cast<unsigned int>(sectors * (r + 0) + (s + 1)),
+                static_cast<unsigned int>(sectors * (r + 1) + (s + 1))
             };
 
             m_indices.insert(m_indices.end(), indices);
@@ -65,7 +67,7 @@ struct sphere {
 
         glBindTexture    (GL_TEXTURE_2D, texture);
         glBindVertexArray(m_VAO);
-        glDrawElements   (GL_QUADS, m_indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElements   (GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 
@@ -95,7 +97,7 @@ protected:
         glVertexAttribPointer    (1, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        if (m_VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'sphere'"};
+        if (m_VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'chunk'"};
 
         glBindVertexArray(0);
     }

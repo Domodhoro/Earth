@@ -53,14 +53,18 @@ auto CAMERA_SENSITIVITY {0.1f};
 lua_script::lua_script lua {"./script.lua"};
 camera::camera cam         {static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT)};
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-void keyboard_callback        (GLFWwindow *window);
-void mouse_callback           (GLFWwindow *window);
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+static void keyboard_callback        (GLFWwindow *window);
+static void mouse_callback           (GLFWwindow *window);
 
 int main(int argc, char *argv[]) {
     printf("%s\n", argv[0]);
 
     if (glfwInit() == GLFW_NOT_INITIALIZED) my_exception {__FILE__, __LINE__, "falha ao iniciar o GLFW"};
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     glfwWindowHint(GLFW_DECORATED, false);
     glfwWindowHint(GLFW_RESIZABLE, false);
@@ -137,11 +141,11 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void keyboard_callback(GLFWwindow *window) {
+static void keyboard_callback(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) cam.keyboard_process(camera::CAMERA_MOVEMENTS::FORWARD);
@@ -152,7 +156,7 @@ void keyboard_callback(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) cam.get_position().y += 0.5f;
 }
 
-void mouse_callback(GLFWwindow *window) {
+static void mouse_callback(GLFWwindow *window) {
     auto x {0.0d};
     auto y {0.0d};
 

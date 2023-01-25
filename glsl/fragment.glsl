@@ -4,18 +4,14 @@ out highp vec4 FragColor;
 
 uniform sampler2D TextureSampler;
 
-in highp vec2 Texture;
+in highp vec2 FragTexture;
 
 void main() {
-    highp vec2 textureInput = Texture;
+    highp vec2 aux   = FragTexture;
+    aux.x            = 1.0f - aux.x;
+    highp vec4 color = texture(TextureSampler, aux);
 
-    textureInput.x = 1.0f - textureInput.x;
+    if (color.r == 1.0f && color.g != 0.0f && color.z == 1.0f) discard;
 
-    highp vec4 FragTexture = texture(TextureSampler, textureInput);
-
-    if (FragTexture.x == 1.0f && FragTexture.z == 1.0f) {
-        discard;
-    }
-
-    FragColor = FragTexture;
+    FragColor = color;
 }

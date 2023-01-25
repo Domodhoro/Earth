@@ -59,9 +59,9 @@ struct sphere {
         model = glm::rotate(model, angle, glm::tvec3<float>(0.0f, 1.0f, 0.0f));
 
         shader.use     ();
-        shader.set_mat4("model", model);
-        shader.set_mat4("view", cam.get_view_matrix());
-        shader.set_mat4("projection", cam.get_projection_matrix());
+        shader.set_mat4("Model", model);
+        shader.set_mat4("View", cam.get_view_matrix());
+        shader.set_mat4("Projection", cam.get_projection_matrix());
 
         glBindTexture    (GL_TEXTURE_2D, texture);
         glBindVertexArray(m_VAO);

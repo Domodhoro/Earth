@@ -1,14 +1,15 @@
 #version 300 es
 
-layout(location = 0) in vec3 position;
-layout(location = 1) in vec2 texture;
+layout(location = 0) in vec3 Position;
+layout(location = 1) in vec2 Texture;
 
-uniform mat4 model, view, projection;
+uniform mat4 Model;
+uniform mat4 View;
+uniform mat4 Projection;
 
-out highp vec2 Texture;
+out highp vec2 FragTexture;
 
 void main() {
-    gl_Position = projection * view * model * vec4(position.xyz, 1.0f);
-
-    Texture = texture;
+    gl_Position = Projection * View * Model * vec4(Position.xyz, 1.0f);
+    FragTexture = Texture;
 }

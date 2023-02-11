@@ -16,9 +16,10 @@ struct shader_program {
         if (!success) my_exception {__FILE__, __LINE__, "falha ao compilar 'shader'"};
     }
 
-    ~shader_program() { glDeleteProgram(m_shader); }
+    virtual ~shader_program() { glDeleteProgram(m_shader); }
 
-    void use      ()                                                const { glUseProgram      (m_shader); }
+    void use() const { glUseProgram(m_shader); }
+
     void set_bool (const char *name, bool value)                    const { glUniform1i       (glGetUniformLocation(m_shader, name), static_cast<int>(value)); }
     void set_int  (const char *name, int value)                     const { glUniform1i       (glGetUniformLocation(m_shader, name), value); }
     void set_float(const char *name, float value)                   const { glUniform1f       (glGetUniformLocation(m_shader, name), value); }
@@ -26,10 +27,10 @@ struct shader_program {
     void set_vec3 (const char *name, const glm::tvec3<float> value) const { glUniform3fv      (glGetUniformLocation(m_shader, name), 1, glm::value_ptr(value)); }
     void set_mat4 (const char *name, const glm::mat4 matrix)        const { glUniformMatrix4fv(glGetUniformLocation(m_shader, name), 1, false, glm::value_ptr(matrix)); }
 
-private:
+protected:
     unsigned int m_shader {0u};
 
-    unsigned int compile_shader_data(const char *data_path, const GLenum type) const {
+    unsigned int compile_shader_data(const char *data_path, const GLenum type) {
         auto data_code   {read_file(data_path)};
         auto shader_code {data_code.c_str()};
         auto data        {glCreateShader(type)};

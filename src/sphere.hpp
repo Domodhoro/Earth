@@ -3,14 +3,6 @@
 
 namespace sphere {
 
-struct vertex_3d {
-    float X {0.0f};
-    float Y {0.0f};
-    float Z {0.0f};
-    float U {0.0f};
-    float V {0.0f};
-};
-
 constexpr auto TAU {2.0f * glm::pi<float>()};
 
 struct sphere {
@@ -76,8 +68,8 @@ protected:
     unsigned int m_VBO {0u};
     unsigned int m_EBO {0u};
 
-    std::vector<vertex_3d>    m_vertice;
-    std::vector<unsigned int> m_indices;
+    std::vector<vertex_3d<float>> m_vertice;
+    std::vector<unsigned int>     m_indices;
 
     void mesh_setup() {
         glGenVertexArrays(1, &m_VAO);
@@ -94,6 +86,7 @@ protected:
 
         glVertexAttribPointer    (0, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(0 * sizeof(float)));
         glEnableVertexAttribArray(0);
+
         glVertexAttribPointer    (1, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 

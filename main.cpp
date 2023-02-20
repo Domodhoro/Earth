@@ -211,8 +211,7 @@ int main(int argc, char *argv[]) {
 
     glDeleteTextures (1, &earth_texture);
     glfwDestroyWindow(window);
-
-    glfwTerminate();
+    glfwTerminate    ();
 
     return 0;
 }

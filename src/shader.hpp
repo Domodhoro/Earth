@@ -3,8 +3,8 @@
 
 namespace shader {
 
-struct shader_program {
-    shader_program(const char *vertex_path, const char *fragment_path) : m_shader {glCreateProgram()} {
+struct shader {
+    shader(const char *vertex_path, const char *fragment_path) : m_shader {glCreateProgram()} {
         glAttachShader(m_shader, compile_shader_data(vertex_path, GL_VERTEX_SHADER));
         glAttachShader(m_shader, compile_shader_data(fragment_path, GL_FRAGMENT_SHADER));
         glLinkProgram (m_shader);
@@ -16,7 +16,7 @@ struct shader_program {
         if (!success) my_exception {__FILE__, __LINE__, "falha ao compilar 'shader'"};
     }
 
-    virtual ~shader_program() { glDeleteProgram(m_shader); }
+    ~shader() { glDeleteProgram(m_shader); }
 
     void use() const { glUseProgram(m_shader); }
 
@@ -31,19 +31,6 @@ protected:
     unsigned int m_shader {0u};
 
     unsigned int compile_shader_data(const char *data_path, const GLenum type) {
-        auto read_file = [](const char *file_path) -> std::string {
-            std::ifstream file     {file_path};
-            std::stringstream code {};
-
-            if (!file.is_open()) my_exception {__FILE__, __LINE__, "falha ao abrir arquivo 'GLSL'"};
-
-            code << file.rdbuf();
-
-            file.close();
-
-            return code.str();
-        };
-
         auto data_code   {read_file(data_path)};
         auto shader_code {data_code.c_str()};
         auto data        {glCreateShader(type)};
@@ -61,6 +48,19 @@ protected:
         }
 
         return data;
+    }
+
+    std::string read_file(const char *file_path) const {
+        std::ifstream file     {file_path};
+        std::stringstream code {};
+
+        if (!file.is_open()) my_exception {__FILE__, __LINE__, "falha ao abrir arquivo 'GLSL'"};
+
+        code << file.rdbuf();
+
+        file.close();
+
+        return code.str();
     }
 };
 

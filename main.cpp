@@ -175,8 +175,7 @@ int main(int argc, char *argv[]) {
     cam.set_FOV        (CAMERA_FOV);
     cam.set_position   (glm::tvec3<float>(0.0f, 0.0f, -5.0f));
 
-    auto earth_shader  {shader::shader_program("./glsl/vertex.glsl", "./glsl/fragment.glsl")};
-
+    auto earth_shader  {shader::shader("./glsl/vertex.glsl", "./glsl/fragment.glsl")};
     auto earth_texture {stb_image_wrapper::load_texture("./img/earth.bmp")};
 
     sphere::sphere earth {64, 64};

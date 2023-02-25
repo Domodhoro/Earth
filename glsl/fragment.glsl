@@ -1,10 +1,8 @@
 #version 300 es
 
-out highp vec4 FragColor;
-
+out highp vec4    FragColor;
+in  highp vec2    FragTexture;
 uniform sampler2D TextureSampler;
-
-in highp vec2 FragTexture;
 
 void main() {
     highp vec2 aux   = FragTexture;

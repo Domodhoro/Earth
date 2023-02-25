@@ -41,7 +41,7 @@ struct sphere {
         glDeleteBuffers     (1, &m_EBO);
     }
 
-    void draw(const shader::shader_program &shader, const unsigned int &texture, camera::camera &cam) const {
+    void draw(const shader::shader &shader, const unsigned int &texture, camera::camera &cam) const {
         glCullFace(GL_FRONT);
 
         glm::mat4 model {1.0f};

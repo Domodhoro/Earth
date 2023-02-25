@@ -41,16 +41,8 @@ struct sphere {
         glDeleteBuffers     (1, &m_EBO);
     }
 
-    void draw(const shader::shader &shader, const unsigned int &texture, camera::camera &cam) const {
+    void draw(const glm::mat4 &model, const shader::shader &shader, const unsigned int &texture, camera::camera &cam) const {
         glCullFace(GL_FRONT);
-
-        glm::mat4 model {1.0f};
-
-        const auto angle {
-            glm::radians(45.0f * static_cast<float>(glfwGetTime()))
-        };
-
-        model = glm::rotate(model, angle, glm::tvec3<float>(0.0f, 1.0f, 0.0f));
 
         shader.use     ();
         shader.set_mat4("Model", model);

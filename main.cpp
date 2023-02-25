@@ -175,10 +175,12 @@ int main(int argc, char *argv[]) {
     cam.set_FOV        (CAMERA_FOV);
     cam.set_position   (glm::tvec3<float>(0.0f, 0.0f, -5.0f));
 
-    auto earth_shader  {shader::shader("./glsl/vertex.glsl", "./glsl/fragment.glsl")};
+    auto shader_program{shader::shader("./glsl/vertex.glsl", "./glsl/fragment.glsl")};
     auto earth_texture {stb_image_wrapper::load_texture("./img/earth.bmp")};
+    auto moon_texture  {stb_image_wrapper::load_texture("./img/moon.bmp")};
 
     sphere::sphere earth {64, 64};
+    sphere::sphere moon  {64, 64};
 
     glEnable   (GL_DEPTH_TEST);
     glEnable   (GL_CULL_FACE);
@@ -197,7 +199,20 @@ int main(int argc, char *argv[]) {
             keyboard_callback(window, cam);
             mouse_callback   (window, cam);
 
-            earth.draw(earth_shader, earth_texture, cam);
+            glm::mat4 earth_model {1.0f};
+            glm::mat4 moon_model  {1.0f};
+
+            const auto angle {
+                glm::radians(45.0f * static_cast<float>(glfwGetTime()))
+            };
+
+            earth_model = glm::rotate   (earth_model, angle, glm::tvec3<float>(0.0f, 1.0f, 0.0f));
+            moon_model  = glm::rotate   (moon_model, angle, glm::tvec3<float>(0.0f, 1.0f, 0.0f));
+            moon_model  = glm::translate(moon_model, glm::tvec3<float>(10.0f, 0.0, 0.0f));
+            moon_model  = glm::scale    (moon_model, glm::tvec3<float>(0.3f));
+
+            earth.draw(earth_model, shader_program, earth_texture, cam);
+            moon.draw (moon_model, shader_program, moon_texture, cam);
 
             glfwSwapBuffers(window);
             glfwPollEvents ();

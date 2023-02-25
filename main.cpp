@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
             glm::mat4 moon_model  {1.0f};
 
             const auto angle {
-                glm::radians(45.0f * static_cast<float>(glfwGetTime()))
+                glm::radians<float>(45.0f * glfwGetTime())
             };
 
             earth_model = glm::rotate   (earth_model, angle, glm::tvec3<float>(0.0f, 1.0f, 0.0f));

@@ -47,8 +47,6 @@ extern "C" {
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-constexpr auto FPS {60};
-
 struct my_exception {
     my_exception(const char *file, int line, const char *description) {
         printf("Ops! Uma falha ocorreu...\n\n");
@@ -62,6 +60,7 @@ struct my_exception {
     }
 };
 
+constexpr auto FPS                {60};
 constexpr auto WINDOW_WIDTH       {800};
 constexpr auto WINDOW_HEIGHT      {600};
 constexpr auto WINDOW_TITLE       {"Earth"};
@@ -152,11 +151,10 @@ int main(int argc, char *argv[]) {
         glfwGetVideoMode(glfwGetPrimaryMonitor())
     };
 
-    auto window_pos_x {(mode->width  - WINDOW_WIDTH)  / 2};
-    auto window_pos_y {(mode->height - WINDOW_HEIGHT) / 2};
+    const auto window_pos_x {(mode->width  - WINDOW_WIDTH)  / 2};
+    const auto window_pos_y {(mode->height - WINDOW_HEIGHT) / 2};
 
     glfwSetWindowPos(window, window_pos_x, window_pos_y);
-
     glfwSetCursorPos(window, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 
     stb_image_wrapper::load_window_icon(window, "./img/icon.bmp");
@@ -191,7 +189,7 @@ int main(int argc, char *argv[]) {
     auto current_frame {0.0f};
 
     while (!glfwWindowShouldClose(window)) {
-        current_frame = static_cast<float>(glfwGetTime());
+        current_frame = glfwGetTime();
 
         if ((current_frame - last_frame) > (1.0f / static_cast<float>(FPS))) {
             glClear     (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -211,7 +209,8 @@ int main(int argc, char *argv[]) {
 
     glDeleteTextures (1, &earth_texture);
     glfwDestroyWindow(window);
-    glfwTerminate    ();
+
+    glfwTerminate();
 
     return 0;
 }

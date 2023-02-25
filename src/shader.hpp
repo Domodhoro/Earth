@@ -31,6 +31,19 @@ protected:
     unsigned int m_shader {0u};
 
     unsigned int compile_shader_data(const char *data_path, const GLenum type) {
+        auto read_file = [](const char *file_path) -> std::string {
+            std::ifstream file     {file_path};
+            std::stringstream code {};
+
+            if (!file.is_open()) my_exception {__FILE__, __LINE__, "falha ao abrir arquivo 'GLSL'"};
+
+            code << file.rdbuf();
+
+            file.close();
+
+            return code.str();
+        };
+
         auto data_code   {read_file(data_path)};
         auto shader_code {data_code.c_str()};
         auto data        {glCreateShader(type)};
@@ -48,19 +61,6 @@ protected:
         }
 
         return data;
-    }
-
-    std::string read_file(const char *file_path) const {
-        std::ifstream file     {file_path};
-        std::stringstream code {};
-
-        if (!file.is_open()) my_exception {__FILE__, __LINE__, "falha ao abrir arquivo 'GLSL'"};
-
-        code << file.rdbuf();
-
-        file.close();
-
-        return code.str();
     }
 };
 

@@ -3,32 +3,32 @@
 
 namespace shader {
 
-struct shader {
-    shader(const char *vertex_path, const char *fragment_path) : m_shader {glCreateProgram()} {
-        glAttachShader(m_shader, compile_shader_data(vertex_path, GL_VERTEX_SHADER));
-        glAttachShader(m_shader, compile_shader_data(fragment_path, GL_FRAGMENT_SHADER));
-        glLinkProgram (m_shader);
+struct shader_program {
+    shader_program(const char *vertex_path, const char *fragment_path) : shader {glCreateProgram()} {
+        glAttachShader(shader, compile_shader_data(vertex_path, GL_VERTEX_SHADER));
+        glAttachShader(shader, compile_shader_data(fragment_path, GL_FRAGMENT_SHADER));
+        glLinkProgram (shader);
 
         auto success {0};
 
-        glGetProgramiv(m_shader, GL_LINK_STATUS, &success);
+        glGetProgramiv(shader, GL_LINK_STATUS, &success);
 
         if (!success) my_exception {__FILE__, __LINE__, "falha ao compilar 'shader'"};
     }
 
-    ~shader() { glDeleteProgram(m_shader); }
+    ~shader_program() { glDeleteProgram(shader); }
 
-    void use() const { glUseProgram(m_shader); }
+    void use() const { glUseProgram(shader); }
 
-    void set_bool (const char *name, bool value)                    const { glUniform1i       (glGetUniformLocation(m_shader, name), static_cast<int>(value)); }
-    void set_int  (const char *name, int value)                     const { glUniform1i       (glGetUniformLocation(m_shader, name), value); }
-    void set_float(const char *name, float value)                   const { glUniform1f       (glGetUniformLocation(m_shader, name), value); }
-    void set_vec2 (const char *name, const glm::tvec2<float> value) const { glUniform2fv      (glGetUniformLocation(m_shader, name), 1, glm::value_ptr(value)); }
-    void set_vec3 (const char *name, const glm::tvec3<float> value) const { glUniform3fv      (glGetUniformLocation(m_shader, name), 1, glm::value_ptr(value)); }
-    void set_mat4 (const char *name, const glm::mat4 matrix)        const { glUniformMatrix4fv(glGetUniformLocation(m_shader, name), 1, false, glm::value_ptr(matrix)); }
+    void set_bool (const char *name, bool value)                    const { glUniform1i       (glGetUniformLocation(shader, name), static_cast<int>(value)); }
+    void set_int  (const char *name, int value)                     const { glUniform1i       (glGetUniformLocation(shader, name), value); }
+    void set_float(const char *name, float value)                   const { glUniform1f       (glGetUniformLocation(shader, name), value); }
+    void set_vec2 (const char *name, const glm::tvec2<float> value) const { glUniform2fv      (glGetUniformLocation(shader, name), 1, glm::value_ptr(value)); }
+    void set_vec3 (const char *name, const glm::tvec3<float> value) const { glUniform3fv      (glGetUniformLocation(shader, name), 1, glm::value_ptr(value)); }
+    void set_mat4 (const char *name, const glm::mat4 matrix)        const { glUniformMatrix4fv(glGetUniformLocation(shader, name), 1, false, glm::value_ptr(matrix)); }
 
 protected:
-    unsigned int m_shader {0u};
+    unsigned int shader {0u};
 
     unsigned int compile_shader_data(const char *data_path, const GLenum type) {
         auto data_code   {read_file(data_path)};

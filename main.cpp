@@ -124,7 +124,7 @@ static void mouse_callback(GLFWwindow *window, camera::camera &cam) {
     last_x = x;
     last_y = y;
 
-    cam.mouse_update(off_set_x, off_set_y);
+    cam.mouse_update(off_set_x, off_set_y, CAMERA_SENSITIVITY);
 }
 
 int main(int argc, char *argv[]) {
@@ -165,17 +165,14 @@ int main(int argc, char *argv[]) {
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    camera::camera cam {
-        static_cast<float>(WINDOW_WIDTH) / static_cast<float>(WINDOW_HEIGHT)
-    };
+    camera::camera cam {WINDOW_WIDTH, WINDOW_HEIGHT};
 
     cam.disable_cursor (window);
     cam.set_speed      (CAMERA_SPEED);
-    cam.set_sensitivity(CAMERA_SENSITIVITY);
     cam.set_FOV        (CAMERA_FOV);
     cam.set_position   (glm::tvec3<float>(0.0f, 0.0f, -5.0f));
 
-    auto shader_program{shader::shader("./glsl/vertex.glsl", "./glsl/fragment.glsl")};
+    auto shader        {shader::shader_program("./glsl/vertex.glsl", "./glsl/fragment.glsl")};
     auto earth_texture {stb_image_wrapper::load_texture("./img/earth.bmp")};
     auto moon_texture  {stb_image_wrapper::load_texture("./img/moon.bmp")};
 
@@ -211,8 +208,8 @@ int main(int argc, char *argv[]) {
             moon_model  = glm::translate(moon_model, glm::tvec3<float>(10.0f, 0.0, 0.0f));
             moon_model  = glm::scale    (moon_model, glm::tvec3<float>(0.3f));
 
-            earth.draw(earth_model, shader_program, earth_texture, cam);
-            moon.draw (moon_model, shader_program, moon_texture, cam);
+            earth.draw(earth_model, shader, earth_texture, cam);
+            moon.draw (moon_model, shader, moon_texture, cam);
 
             glfwSwapBuffers(window);
             glfwPollEvents ();

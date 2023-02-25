@@ -18,9 +18,9 @@ struct sphere {
             const auto y {std::sin(-glm::pi<float>() / 2.0f + glm::pi<float>() * THETA)};
             const auto z {std::sin(TAU * PHI) * std::sin(glm::pi<float>() * THETA)};
 
-            m_vertice.push_back({x, y, z, PHI, THETA});
+            vertice.push_back({x, y, z, PHI, THETA});
 
-            const std::initializer_list<unsigned int> indices {
+            const std::initializer_list<unsigned int> indice {
                 static_cast<unsigned int>(sectors * (r + 0) + (s + 0)),
                 static_cast<unsigned int>(sectors * (r + 0) + (s + 1)),
                 static_cast<unsigned int>(sectors * (r + 1) + (s + 0)),
@@ -29,19 +29,19 @@ struct sphere {
                 static_cast<unsigned int>(sectors * (r + 1) + (s + 1))
             };
 
-            m_indices.insert(m_indices.end(), indices);
+            this->indice.insert(this->indice.end(), indice);
         }
 
         mesh_setup();
     }
 
     ~sphere() {
-        glDeleteVertexArrays(1, &m_VAO);
-        glDeleteBuffers     (1, &m_VBO);
-        glDeleteBuffers     (1, &m_EBO);
+        glDeleteVertexArrays(1, &VAO);
+        glDeleteBuffers     (1, &VBO);
+        glDeleteBuffers     (1, &EBO);
     }
 
-    void draw(const glm::mat4 &model, const shader::shader &shader, const unsigned int &texture, camera::camera &cam) const {
+    void draw(const glm::mat4 &model, const shader::shader_program &shader, const unsigned int &texture, camera::camera &cam) const {
         glCullFace(GL_FRONT);
 
         shader.use     ();
@@ -50,31 +50,31 @@ struct sphere {
         shader.set_mat4("Projection", cam.get_projection_matrix());
 
         glBindTexture    (GL_TEXTURE_2D, texture);
-        glBindVertexArray(m_VAO);
-        glDrawElements   (GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(VAO);
+        glDrawElements   (GL_TRIANGLES, indice.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 
 protected:
-    unsigned int m_VAO {0u};
-    unsigned int m_VBO {0u};
-    unsigned int m_EBO {0u};
+    unsigned int VAO {0u};
+    unsigned int VBO {0u};
+    unsigned int EBO {0u};
 
-    std::vector<vertex_3d<float>> m_vertice;
-    std::vector<unsigned int>     m_indices;
+    std::vector<vertex_3d<float>> vertice;
+    std::vector<unsigned int>     indice;
 
     void mesh_setup() {
-        glGenVertexArrays(1, &m_VAO);
-        glGenBuffers     (1, &m_VBO);
-        glGenBuffers     (1, &m_EBO);
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers     (1, &VBO);
+        glGenBuffers     (1, &EBO);
 
-        glBindVertexArray(m_VAO);
+        glBindVertexArray(VAO);
 
-        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-        glBufferData(GL_ARRAY_BUFFER, m_vertice.size() * 5 * sizeof(float), &m_vertice.at(0), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, vertice.size() * 5 * sizeof(float), &vertice.at(0), GL_STATIC_DRAW);
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices.at(0), GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indice.size() * sizeof(unsigned int), &indice.at(0), GL_STATIC_DRAW);
 
         glVertexAttribPointer    (0, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(0 * sizeof(float)));
         glEnableVertexAttribArray(0);
@@ -82,7 +82,7 @@ protected:
         glVertexAttribPointer    (1, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        if (m_VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'chunk'"};
+        if (VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'chunk'"};
 
         glBindVertexArray(0);
     }

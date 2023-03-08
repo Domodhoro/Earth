@@ -8,7 +8,7 @@ void load_window_icon(GLFWwindow *window, const char *icon_path) {
 
     img.pixels = stbi_load(icon_path, &img.width, &img.height, 0, 4);
 
-    if (img.pixels == nullptr) my_exception {__FILE__, __LINE__, "falha ao carregar ícone da janela de visualização"};
+    if (img.pixels == nullptr) error_log(__FILE__, __LINE__, "falha ao carregar ï¿½cone da janela de visualizaï¿½ï¿½o");
 
     glfwSetWindowIcon(window, 1, &img);
 
@@ -33,7 +33,7 @@ unsigned int load_texture(const char *texture_path) {
 
     auto pixels {stbi_load(texture_path, &width, &height, &channels, 0)};
 
-    if (pixels == nullptr) my_exception {__FILE__, __LINE__, "falha ao carregar textura"};
+    if (pixels == nullptr) error_log(__FILE__, __LINE__, "falha ao carregar textura");
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pixels);
     glGenerateMipmap(GL_TEXTURE_2D);

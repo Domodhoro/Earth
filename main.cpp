@@ -47,18 +47,14 @@ extern "C" {
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-struct my_exception {
-    my_exception(const char *file, int line, const char *description) {
-        printf("Ops! Uma falha ocorreu...\n\n");
-        printf("File:        %s\n", basename(file));
-        printf("Line:        %i\n", line);
-        printf("Description: %s\n", description);
-    }
+static void error_log(const char *file, const int line, const char *description) {
+    puts  ("A failure occurred!");
+    printf("File:        %s.\n", file);
+    printf("Line:        %i.\n", line);
+    printf("Description: %s.\n", description);
 
-    ~my_exception() {
-        exit(EXIT_FAILURE);
-    }
-};
+    exit(EXIT_FAILURE);
+}
 
 constexpr auto FPS                {60};
 constexpr auto WINDOW_WIDTH       {800};
@@ -69,12 +65,9 @@ constexpr auto CAMERA_FOV         {60.0f};
 constexpr auto CAMERA_SENSITIVITY {0.1f};
 
 template<typename T>
-struct vertex_3d {
-    T x;
-    T y;
-    T z;
-    T u;
-    T v;
+struct vertex {
+    glm::tvec3<T> position;
+    glm::tvec2<T> texture;
 };
 
 enum struct CAMERA_MOVEMENTS : int {
@@ -130,7 +123,7 @@ static void mouse_callback(GLFWwindow *window, camera::camera &cam) {
 int main(int argc, char *argv[]) {
     printf("%s\n", argv[0]);
 
-    if (glfwInit() == GLFW_NOT_INITIALIZED) my_exception {__FILE__, __LINE__, "falha ao iniciar o GLFW"};
+    if (glfwInit() == GLFW_NOT_INITIALIZED) error_log(__FILE__, __LINE__, "falha ao iniciar o GLFW");
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -143,7 +136,7 @@ int main(int argc, char *argv[]) {
         glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr)
     };
 
-    if (window == nullptr) my_exception {__FILE__, __LINE__, "falha ao criar a janela de visualizaÃ§Ã£o"};
+    if (window == nullptr) error_log(__FILE__, __LINE__, "falha ao criar a janela de visualização");
 
     glfwMakeContextCurrent(window);
 
@@ -161,7 +154,7 @@ int main(int argc, char *argv[]) {
 
     glewExperimental = true;
 
-    if (glewInit() != GLEW_OK) my_exception {__FILE__, __LINE__, "falha ao iniciar GLEW"};
+    if (glewInit() != GLEW_OK) error_log(__FILE__, __LINE__, "falha ao iniciar GLEW");
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
@@ -183,13 +176,13 @@ int main(int argc, char *argv[]) {
     glEnable   (GL_CULL_FACE);
     glFrontFace(GL_CCW);
 
-    auto last_frame    {0.0f};
-    auto current_frame {0.0f};
+    auto last_time    {0.0f};
+    auto current_time {0.0f};
 
     while (!glfwWindowShouldClose(window)) {
-        current_frame = glfwGetTime();
+        current_time = glfwGetTime();
 
-        if ((current_frame - last_frame) > (1.0f / static_cast<float>(FPS))) {
+        if ((current_time - last_time) > (1.0f / static_cast<float>(FPS))) {
             glClear     (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -214,7 +207,7 @@ int main(int argc, char *argv[]) {
             glfwSwapBuffers(window);
             glfwPollEvents ();
 
-            last_frame = current_frame;
+            last_time = current_time;
         }
     }
 

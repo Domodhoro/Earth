@@ -18,7 +18,7 @@ struct sphere {
             const auto y {std::sin(-glm::pi<float>() / 2.0f + glm::pi<float>() * THETA)};
             const auto z {std::sin(TAU * PHI) * std::sin(glm::pi<float>() * THETA)};
 
-            vertice.push_back({x, y, z, PHI, THETA});
+            vertice.push_back(vertex<float>{{x, y, z}, {PHI, THETA}});
 
             const std::initializer_list<unsigned int> indice {
                 static_cast<unsigned int>(sectors * (r + 0) + (s + 0)),
@@ -60,8 +60,8 @@ protected:
     unsigned int VBO {0u};
     unsigned int EBO {0u};
 
-    std::vector<vertex_3d<float>> vertice;
-    std::vector<unsigned int>     indice;
+    std::vector<vertex<float>> vertice;
+    std::vector<unsigned int>  indice;
 
     void mesh_setup() {
         glGenVertexArrays(1, &VAO);
@@ -82,7 +82,7 @@ protected:
         glVertexAttribPointer    (1, 3, GL_FLOAT, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 
-        if (VAO == 0u) my_exception {__FILE__, __LINE__, "falha ao criar VAO do 'chunk'"};
+        if (VAO == 0u) error_log(__FILE__, __LINE__, "falha ao criar VAO do 'chunk'");
 
         glBindVertexArray(0);
     }

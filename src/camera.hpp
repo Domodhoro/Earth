@@ -45,13 +45,13 @@ struct camera {
     }
 
 protected:
-    float aspect      {1.0f};
-    float speed       {1.0f};
-    float FOV         {60.0f};
-    float near        {0.001f};
-    float far         {1000.0f};
-    float alpha       {90.0f};
-    float beta        {0.0f};
+    float aspect {1.0f};
+    float speed  {1.0f};
+    float FOV    {60.0f};
+    float near   {0.001f};
+    float far    {1000.0f};
+    float alpha  {90.0f};
+    float beta   {0.0f};
 
     glm::tvec3<float> Front     {0.0f, 0.0f, 1.0f};
     glm::tvec3<float> Position  {0.0f};

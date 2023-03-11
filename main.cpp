@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
         glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, nullptr, nullptr)
     };
 
-    if (window == nullptr) error_log(__FILE__, __LINE__, "falha ao criar a janela de visualizaÃ§Ã£o");
+    if (window == nullptr) error_log(__FILE__, __LINE__, "falha ao criar a janela de visualização");
 
     glfwMakeContextCurrent(window);
 
